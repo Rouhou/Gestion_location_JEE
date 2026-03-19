@@ -6,144 +6,113 @@
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Enregistrer un paiement — GestionLoc Admin</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
-    <style>
-        /* ── Searchable select (Tom Select) ── */
-        .ts-wrapper.single .ts-control {
-            padding: .6rem .9rem;
-            border: 1.5px solid var(--border, #e0e0e0);
-            border-radius: 7px;
-            font-size: .9rem;
-            background: #fafafa;
-            cursor: pointer;
-        }
-        .ts-wrapper.single.focus .ts-control {
-            border-color: #3949ab;
-            box-shadow: 0 0 0 3px rgba(57,73,171,.1);
-            background: #fff;
-        }
-        .ts-dropdown { border-radius: 7px; border: 1.5px solid #e0e0e0; box-shadow: 0 4px 16px rgba(0,0,0,.1); }
-        .ts-dropdown .option { padding: .55rem 1rem; font-size: .88rem; }
-        .ts-dropdown .option:hover, .ts-dropdown .option.active { background: #e8eaf6; color: #1a237e; }
-        .ts-dropdown .option .sub { font-size: .78rem; color: #9e9e9e; display: block; }
-
-        /* ── Contrat info panel ── */
-        #contratInfo {
-            background: #e8eaf6;
-            border: 1.5px solid #c5cae9;
-            border-radius: 8px;
-            padding: 1rem 1.2rem;
-            font-size: .88rem;
-            display: none;
-            margin-top: .5rem;
-        }
-        #contratInfo .ci-row { display: flex; gap: 2rem; flex-wrap: wrap; }
-        #contratInfo .ci-item { display: flex; flex-direction: column; }
-        #contratInfo .ci-label { font-size: .72rem; color: #5c6bc0; text-transform: uppercase; }
-        #contratInfo .ci-value { font-weight: 700; color: #1a237e; }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.min.css" rel="stylesheet"/>
 </head>
-<body>
-<div class="layout">
+<body class="bg-gray-50">
+<div class="flex h-screen overflow-hidden">
     <jsp:include page="/WEB-INF/views/common/navbar.jsp"/>
-    <div class="main-content">
-        <div class="topbar">
-            <span class="topbar-title">💸 Enregistrer un nouveau paiement</span>
+    <div class="flex-1 flex flex-col overflow-auto">
+
+        <div class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200 shrink-0">
+            <span class="font-semibold text-gray-800 text-lg">Enregistrer un nouveau paiement</span>
             <a href="${pageContext.request.contextPath}/admin/paiements"
-               class="btn btn-outline btn-sm">← Retour</a>
+               class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
+                Retour
+            </a>
         </div>
-        <div class="page-body">
+
+        <div class="flex-1 p-6">
             <c:if test="${not empty erreur}">
-                <div class="alert alert-danger">⚠️ ${erreur}</div>
+                <div class="px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm mb-5">${erreur}</div>
             </c:if>
 
-            <div class="card" style="max-width:680px;margin:0 auto">
-                <div class="card-header"><h2>Nouveau paiement</h2></div>
-                <div class="card-body">
-                    <form method="post" action="${pageContext.request.contextPath}/admin/paiements"
-                          id="paiementForm">
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm max-w-2xl mx-auto">
+                <div class="px-5 py-4 border-b border-gray-100">
+                    <h2 class="font-semibold text-gray-800">Nouveau paiement</h2>
+                </div>
+                <div class="p-5">
+                    <form method="post" action="${pageContext.request.contextPath}/admin/paiements" id="paiementForm">
                         <input type="hidden" name="action" value="enregistrer"/>
 
-                        <div class="form-grid">
-
-                            <%-- ── 1. Locataire avec recherche ── --%>
-                            <div class="form-group full">
-                                <label for="locataireSelect">Locataire *</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex flex-col gap-1 col-span-2">
+                                <label for="locataireSelect" class="text-sm font-medium text-gray-700">Locataire *</label>
                                 <select id="locataireSelect" name="locataireId" required>
                                     <option value="">Rechercher un locataire...</option>
                                     <c:forEach var="l" items="${locataires}">
-                                        <option value="${l.id}"
-                                                data-email="${l.email}"
-                                                data-tel="${l.telephone}">
+                                        <option value="${l.id}" data-email="${l.email}" data-tel="${l.telephone}">
                                             ${l.prenom} ${l.nom} — ${l.email}
                                         </option>
                                     </c:forEach>
                                 </select>
                             </div>
 
-                            <%-- ── 2. Contrat actif du locataire ── --%>
-                            <div class="form-group full">
-                                <label for="contratSelect">Contrat *</label>
-                                <select id="contratSelect" name="contratId" required disabled>
-                                    <option value="">— Sélectionner d'abord un locataire —</option>
+                            <div class="flex flex-col gap-1 col-span-2">
+                                <label for="contratSelect" class="text-sm font-medium text-gray-700">Contrat *</label>
+                                <select id="contratSelect" name="contratId" required disabled
+                                        class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent disabled:bg-gray-100 disabled:text-gray-400">
+                                    <option value="">— Selectionner d'abord un locataire —</option>
                                 </select>
-                                <%-- Panel info contrat --%>
-                                <div id="contratInfo">
-                                    <div class="ci-row">
-                                        <div class="ci-item">
-                                            <span class="ci-label">Immeuble / Unité</span>
-                                            <span class="ci-value" id="ciUnite">—</span>
+                                <div id="contratInfo" class="hidden mt-2 bg-indigo-50 border border-indigo-200 rounded-lg p-3">
+                                    <div class="flex gap-6 flex-wrap">
+                                        <div>
+                                            <div class="text-xs text-indigo-400 uppercase font-semibold">Immeuble / Unite</div>
+                                            <div class="font-bold text-indigo-800 text-sm" id="ciUnite">—</div>
                                         </div>
-                                        <div class="ci-item">
-                                            <span class="ci-label">Loyer convenu</span>
-                                            <span class="ci-value" id="ciLoyer">—</span>
+                                        <div>
+                                            <div class="text-xs text-indigo-400 uppercase font-semibold">Loyer convenu</div>
+                                            <div class="font-bold text-indigo-800 text-sm" id="ciLoyer">—</div>
                                         </div>
-                                        <div class="ci-item">
-                                            <span class="ci-label">Début contrat</span>
-                                            <span class="ci-value" id="ciDebut">—</span>
+                                        <div>
+                                            <div class="text-xs text-indigo-400 uppercase font-semibold">Debut contrat</div>
+                                            <div class="font-bold text-indigo-800 text-sm" id="ciDebut">—</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <%-- ── 3. Mois concerné ── --%>
-                            <div class="form-group">
-                                <label for="moisConcerne">Mois concerné *</label>
-                                <input type="month" id="moisConcerne" name="moisConcerne" required/>
+                            <div class="flex flex-col gap-1">
+                                <label for="moisConcerne" class="text-sm font-medium text-gray-700">Mois concerne *</label>
+                                <input type="month" id="moisConcerne" name="moisConcerne" required
+                                       class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"/>
                             </div>
 
-                            <%-- ── 4. Montant ── --%>
-                            <div class="form-group">
-                                <label for="montant">Montant (F CFA) *</label>
-                                <input type="number" id="montant" name="montant" required
-                                       min="1" placeholder="350000"/>
+                            <div class="flex flex-col gap-1">
+                                <label for="montant" class="text-sm font-medium text-gray-700">Montant (F CFA) *</label>
+                                <input type="number" id="montant" name="montant" required min="1" placeholder="350000"
+                                       class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"/>
                             </div>
 
-                            <%-- ── 5. Date de paiement ── --%>
-                            <div class="form-group">
-                                <label for="datePaiement">Date de paiement *</label>
-                                <input type="date" id="datePaiement" name="datePaiement" required/>
+                            <div class="flex flex-col gap-1">
+                                <label for="datePaiement" class="text-sm font-medium text-gray-700">Date de paiement *</label>
+                                <input type="date" id="datePaiement" name="datePaiement" required
+                                       class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"/>
                             </div>
 
-                            <%-- ── 6. Mode de paiement ── --%>
-                            <div class="form-group">
-                                <label for="modePaiement">Mode de paiement *</label>
-                                <select id="modePaiement" name="modePaiement" required>
+                            <div class="flex flex-col gap-1">
+                                <label for="modePaiement" class="text-sm font-medium text-gray-700">Mode de paiement *</label>
+                                <select id="modePaiement" name="modePaiement" required
+                                        class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent">
                                     <option value="VIREMENT">Virement bancaire</option>
-                                    <option value="ESPECES">Espèces</option>
-                                    <option value="CHEQUE">Chèque</option>
+                                    <option value="ESPECES">Especes</option>
+                                    <option value="CHEQUE">Cheque</option>
                                     <option value="MOBILE_MONEY">Mobile Money</option>
                                     <option value="ORANGE_MONEY">Orange Money</option>
                                     <option value="WAVE">Wave</option>
                                 </select>
                             </div>
-
                         </div>
 
-                        <div style="display:flex;gap:.8rem;margin-top:1.5rem">
-                            <button type="submit" class="btn btn-primary">💾 Enregistrer le paiement</button>
+                        <div class="flex items-center gap-3 mt-6">
+                            <button type="submit"
+                                    class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-indigo-700 text-white hover:bg-indigo-800 transition-colors">
+                                Enregistrer le paiement
+                            </button>
                             <a href="${pageContext.request.contextPath}/admin/paiements"
-                               class="btn btn-outline">Annuler</a>
+                               class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
+                                Annuler
+                            </a>
                         </div>
                     </form>
                 </div>
@@ -153,7 +122,6 @@
     </div>
 </div>
 
-<%-- Données contrats en JSON pour le JS --%>
 <script>
 const contratsParLocataire = {
     <c:forEach var="entry" items="${contratsParLocataire}" varStatus="vs">
@@ -161,7 +129,7 @@ const contratsParLocataire = {
         <c:forEach var="c" items="${entry.value}" varStatus="cs">
         {
             id:      "${c.id}",
-            unite:   "${c.unite.immeuble.nom} — Unité ${c.unite.numero}",
+            unite:   "${c.unite.immeuble.nom} — Unite ${c.unite.numero}",
             loyer:   "<fmt:formatNumber value='${c.loyerConvenu}' pattern='#,##0'/> F CFA",
             debut:   "${c.dateDebut}",
             loyerVal: ${c.loyerConvenu}
@@ -172,12 +140,8 @@ const contratsParLocataire = {
 };
 </script>
 
-<%-- Tom Select (recherche dans la liste déroulante) --%>
-<link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.min.css" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
-
 <script>
-// ── Initialisation Tom Select sur le champ locataire ──
 const tsLocataire = new TomSelect('#locataireSelect', {
     placeholder:     'Taper un nom, email...',
     searchField:     ['text'],
@@ -187,7 +151,7 @@ const tsLocataire = new TomSelect('#locataireSelect', {
             const parts = data.text.split(' — ');
             const nom   = parts[0] || data.text;
             const email = parts[1] || '';
-            return `<div>${nom}<span class="sub">${email}</span></div>`;
+            return `<div class="py-1">${nom}<span class="text-xs text-gray-400 block">${email}</span></div>`;
         }
     },
     onChange: function(locataireId) {
@@ -195,50 +159,40 @@ const tsLocataire = new TomSelect('#locataireSelect', {
     }
 });
 
-// ── Chargement des contrats selon le locataire choisi ──
 function chargerContrats(locataireId) {
     const select      = document.getElementById('contratSelect');
     const contratInfo = document.getElementById('contratInfo');
-
-    select.innerHTML  = '<option value="">— Sélectionner un contrat —</option>';
+    select.innerHTML  = '<option value="">— Selectionner un contrat —</option>';
     select.disabled   = true;
-    contratInfo.style.display = 'none';
-
+    contratInfo.classList.add('hidden');
     if (!locataireId || !contratsParLocataire[locataireId]) return;
-
     const contrats = contratsParLocataire[locataireId];
     if (contrats.length === 0) {
         select.innerHTML = '<option value="">Aucun contrat actif pour ce locataire</option>';
         return;
     }
-
     contrats.forEach(c => {
         const opt   = document.createElement('option');
         opt.value   = c.id;
         opt.text    = c.unite + ' — Loyer : ' + c.loyer;
-        opt.dataset.unite  = c.unite;
-        opt.dataset.loyer  = c.loyer;
-        opt.dataset.debut  = c.debut;
+        opt.dataset.unite    = c.unite;
+        opt.dataset.loyer    = c.loyer;
+        opt.dataset.debut    = c.debut;
         opt.dataset.loyerVal = c.loyerVal;
         select.appendChild(opt);
     });
-
     select.disabled = false;
-
-    // Si un seul contrat → sélection auto
     if (contrats.length === 1) {
         select.value = contrats[0].id;
         afficherInfoContrat(contrats[0]);
-        // Pré-remplir le montant avec le loyer convenu
         document.getElementById('montant').value = contrats[0].loyerVal;
     }
 }
 
-// ── Affichage du panel info contrat ──
 document.getElementById('contratSelect').addEventListener('change', function() {
     const opt = this.selectedOptions[0];
     if (!opt || !opt.dataset.unite) {
-        document.getElementById('contratInfo').style.display = 'none';
+        document.getElementById('contratInfo').classList.add('hidden');
         return;
     }
     afficherInfoContrat({
@@ -254,13 +208,10 @@ function afficherInfoContrat(c) {
     document.getElementById('ciUnite').textContent = c.unite;
     document.getElementById('ciLoyer').textContent = c.loyer;
     document.getElementById('ciDebut').textContent = c.debut;
-    document.getElementById('contratInfo').style.display = 'block';
+    document.getElementById('contratInfo').classList.remove('hidden');
 }
 
-// ── Date du jour par défaut ──
 document.getElementById('datePaiement').value = new Date().toISOString().split('T')[0];
-
-// ── Mois courant par défaut ──
 const now = new Date();
 document.getElementById('moisConcerne').value =
     now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');

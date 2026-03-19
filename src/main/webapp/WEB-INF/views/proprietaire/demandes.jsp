@@ -6,155 +6,144 @@
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Demandes de location — GestionLoc</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<div class="layout">
+<body class="bg-gray-50">
+<div class="flex h-screen overflow-hidden">
     <jsp:include page="/WEB-INF/views/common/navbar.jsp"/>
-    <div class="main-content">
-        <div class="topbar">
-            <span class="topbar-title">📬 Demandes de Location</span>
+    <div class="flex-1 flex flex-col overflow-auto">
+
+        <div class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200 shrink-0">
+            <span class="font-semibold text-gray-800 text-lg">Demandes de Location</span>
         </div>
-        <div class="page-body">
-            <c:if test="${not empty message}"><div class="alert alert-success">✅ ${message}</div></c:if>
-            <c:if test="${not empty erreur}"><div class="alert alert-danger">⚠️ ${erreur}</div></c:if>
+
+        <div class="flex-1 p-6 flex flex-col gap-5">
+            <c:if test="${not empty message}"><div class="px-4 py-3 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm">${message}</div></c:if>
+            <c:if test="${not empty erreur}"><div class="px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">${erreur}</div></c:if>
 
             <%-- Compteurs --%>
-            <div class="stats-grid" style="margin-bottom:1.5rem">
-                <div class="stat-card orange">
-                    <span class="stat-icon">⏳</span>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="bg-white rounded-xl border-l-4 border-l-amber-500 border border-gray-200 p-4 shadow-sm">
                     <c:set var="nbAttente" value="0"/>
                     <c:forEach var="d" items="${demandes}">
                         <c:if test="${d.statut eq 'EN_ATTENTE'}"><c:set var="nbAttente" value="${nbAttente + 1}"/></c:if>
                     </c:forEach>
-                    <span class="stat-value">${nbAttente}</span>
-                    <span class="stat-label">En attente</span>
+                    <div class="text-2xl font-bold text-gray-800">${nbAttente}</div>
+                    <div class="text-xs text-gray-500 mt-0.5">En attente</div>
                 </div>
-                <div class="stat-card green">
-                    <span class="stat-icon">✅</span>
+                <div class="bg-white rounded-xl border-l-4 border-l-green-500 border border-gray-200 p-4 shadow-sm">
                     <c:set var="nbAcceptees" value="0"/>
                     <c:forEach var="d" items="${demandes}">
                         <c:if test="${d.statut eq 'ACCEPTEE'}"><c:set var="nbAcceptees" value="${nbAcceptees + 1}"/></c:if>
                     </c:forEach>
-                    <span class="stat-value">${nbAcceptees}</span>
-                    <span class="stat-label">Acceptées</span>
+                    <div class="text-2xl font-bold text-gray-800">${nbAcceptees}</div>
+                    <div class="text-xs text-gray-500 mt-0.5">Acceptees</div>
                 </div>
-                <div class="stat-card red">
-                    <span class="stat-icon">❌</span>
+                <div class="bg-white rounded-xl border-l-4 border-l-red-500 border border-gray-200 p-4 shadow-sm">
                     <c:set var="nbRefusees" value="0"/>
                     <c:forEach var="d" items="${demandes}">
                         <c:if test="${d.statut eq 'REFUSEE'}"><c:set var="nbRefusees" value="${nbRefusees + 1}"/></c:if>
                     </c:forEach>
-                    <span class="stat-value">${nbRefusees}</span>
-                    <span class="stat-label">Refusées</span>
+                    <div class="text-2xl font-bold text-gray-800">${nbRefusees}</div>
+                    <div class="text-xs text-gray-500 mt-0.5">Refusees</div>
                 </div>
             </div>
 
-            <%-- Filtre --%>
-            <div class="filter-bar">
-                <select id="statutFilter" onchange="filterTable()">
+            <%-- Filtres --%>
+            <div class="flex items-center gap-3">
+                <select id="statutFilter" onchange="filterTable()"
+                        class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
                     <option value="">Tous les statuts</option>
                     <option value="en_attente">En attente</option>
-                    <option value="acceptee">Acceptée</option>
-                    <option value="refusee">Refusée</option>
+                    <option value="acceptee">Acceptee</option>
+                    <option value="refusee">Refusee</option>
                 </select>
-                <input type="text" id="searchInput" placeholder="🔍 Locataire, unité..." onkeyup="filterTable()"/>
+                <input type="text" id="searchInput" placeholder="Locataire, unite..." onkeyup="filterTable()"
+                       class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"/>
             </div>
 
-            <div class="card">
-                <div class="card-header"><h2>Liste des demandes (${demandes.size()})</h2></div>
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+                <div class="px-5 py-4 border-b border-gray-100">
+                    <h2 class="font-semibold text-gray-800">Liste des demandes (${demandes.size()})</h2>
+                </div>
 
                 <c:if test="${empty demandes}">
-                    <div style="text-align:center;padding:3rem;color:#9e9e9e">
-                        <p style="font-size:3rem">📭</p>
-                        <p>Aucune demande reçue pour le moment.</p>
+                    <div class="text-center py-12 text-gray-400">
+                        <p class="text-lg mb-1">Aucune demande recue</p>
+                        <p class="text-sm">Les demandes de location apparaitront ici</p>
                     </div>
                 </c:if>
 
-                <div class="table-wrap">
-                    <table id="demandesTable">
-                        <thead>
+                <div class="overflow-x-auto">
+                    <table id="demandesTable" class="w-full text-sm">
+                        <thead class="bg-gray-50 border-b border-gray-100">
                             <tr>
-                                <th>Locataire</th>
-                                <th>Immeuble / Unité</th>
-                                <th>Loyer</th>
-                                <th>Message</th>
-                                <th>Date demande</th>
-                                <th>Statut</th>
-                                <th>Actions</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Locataire</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Immeuble / Unite</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Loyer</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Message</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Date demande</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Statut</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="divide-y divide-gray-50">
                         <c:forEach var="d" items="${demandes}">
-                            <tr>
-                                <td>
-                                    <strong>${d.locataire.prenom} ${d.locataire.nom}</strong><br>
-                                    <small style="color:#9e9e9e">${d.locataire.email}</small><br>
-                                    <small style="color:#9e9e9e">${d.locataire.telephone}</small>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-5 py-3">
+                                    <div class="font-medium text-gray-800">${d.locataire.prenom} ${d.locataire.nom}</div>
+                                    <div class="text-xs text-gray-400">${d.locataire.email}</div>
+                                    <div class="text-xs text-gray-400">${d.locataire.telephone}</div>
                                 </td>
-                                <td>
-                                    <strong>${d.unite.immeuble.nom}</strong><br>
-                                    <small style="color:#9e9e9e">
-                                        Unité ${d.unite.numero} —
-                                        ${d.unite.nbPieces} pièces
-                                    </small>
+                                <td class="px-5 py-3">
+                                    <div class="font-medium text-gray-800">${d.unite.immeuble.nom}</div>
+                                    <div class="text-xs text-gray-400">Unite ${d.unite.numero} — ${d.unite.nbPieces} pieces</div>
                                 </td>
-                                <td>
-                                    <strong style="color:#1a237e">
-                                        <fmt:formatNumber value="${d.unite.loyerMensuel}" pattern="#,##0"/> F
-                                    </strong>
+                                <td class="px-5 py-3 font-semibold text-indigo-700">
+                                    <fmt:formatNumber value="${d.unite.loyerMensuel}" pattern="#,##0"/> F
                                 </td>
-                                <td>
+                                <td class="px-5 py-3 text-gray-600 max-w-xs">
                                     <c:choose>
                                         <c:when test="${not empty d.message}">
-                                            <span title="${d.message}" style="cursor:help">
+                                            <span title="${d.message}" class="cursor-help truncate block max-w-xs">
                                                 ${d.message.length() > 40 ? d.message.substring(0,40).concat('...') : d.message}
                                             </span>
                                         </c:when>
-                                        <c:otherwise><span style="color:#bdbdbd">—</span></c:otherwise>
+                                        <c:otherwise><span class="text-gray-300">—</span></c:otherwise>
                                     </c:choose>
                                 </td>
-                                <td>
-                                    ${d.dateDemandeFormattee}<br>
-                                    <small style="color:#9e9e9e">
-                                        ${d.heureDemandeFormattee}
-                                    </small>
+                                <td class="px-5 py-3">
+                                    <div class="text-gray-700">${d.dateDemandeFormattee}</div>
+                                    <div class="text-xs text-gray-400">${d.heureDemandeFormattee}</div>
                                 </td>
-                                <td>
+                                <td class="px-5 py-3">
                                     <c:choose>
-                                        <c:when test="${d.statut eq 'EN_ATTENTE'}">
-                                            <span class="badge badge-orange">⏳ En attente</span>
-                                        </c:when>
-                                        <c:when test="${d.statut eq 'ACCEPTEE'}">
-                                            <span class="badge badge-green">✅ Acceptée</span>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <span class="badge badge-red">❌ Refusée</span>
-                                        </c:otherwise>
+                                        <c:when test="${d.statut eq 'EN_ATTENTE'}"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">En attente</span></c:when>
+                                        <c:when test="${d.statut eq 'ACCEPTEE'}"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Acceptee</span></c:when>
+                                        <c:otherwise><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Refusee</span></c:otherwise>
                                     </c:choose>
                                 </td>
-                                <td>
+                                <td class="px-5 py-3">
                                     <c:if test="${d.statut eq 'EN_ATTENTE'}">
-                                        <form method="post"
-                                              action="${pageContext.request.contextPath}/proprietaire/demandes"
-                                              style="display:inline">
-                                            <input type="hidden" name="id" value="${d.id}"/>
-                                            <input type="hidden" name="action" value="accepter"/>
-                                            <button type="submit" class="btn btn-success btn-sm"
-                                                    onclick="return confirm('Accepter la demande de ${d.locataire.prenom} ${d.locataire.nom} ?')">
-                                                ✅ Accepter
-                                            </button>
-                                        </form>
-                                        <form method="post"
-                                              action="${pageContext.request.contextPath}/proprietaire/demandes"
-                                              style="display:inline;margin-top:.3rem">
-                                            <input type="hidden" name="id" value="${d.id}"/>
-                                            <input type="hidden" name="action" value="refuser"/>
-                                            <button type="submit" class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Refuser cette demande ?')">
-                                                ❌ Refuser
-                                            </button>
-                                        </form>
+                                        <div class="flex flex-col gap-1">
+                                            <form method="post" action="${pageContext.request.contextPath}/proprietaire/demandes" class="inline">
+                                                <input type="hidden" name="id" value="${d.id}"/>
+                                                <input type="hidden" name="action" value="accepter"/>
+                                                <button type="submit"
+                                                        onclick="return confirm('Accepter la demande de ${d.locataire.prenom} ${d.locataire.nom} ?')"
+                                                        class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors">
+                                                    Accepter
+                                                </button>
+                                            </form>
+                                            <form method="post" action="${pageContext.request.contextPath}/proprietaire/demandes" class="inline">
+                                                <input type="hidden" name="id" value="${d.id}"/>
+                                                <input type="hidden" name="action" value="refuser"/>
+                                                <button type="submit" onclick="return confirm('Refuser cette demande ?')"
+                                                        class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors">
+                                                    Refuser
+                                                </button>
+                                            </form>
+                                        </div>
                                     </c:if>
                                 </td>
                             </tr>

@@ -3,16 +3,18 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Accès refusé — GestionLoc</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
+    <title>Acces refuse — GestionLoc</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f0f2f8">
-<div style="text-align:center;background:#fff;padding:3rem;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.1);max-width:450px">
-    <p style="font-size:5rem;margin-bottom:.5rem">🚫</p>
-    <h1 style="font-size:4rem;color:#c62828;font-weight:800">403</h1>
-    <h2 style="color:#424242;margin-bottom:.8rem">Accès refusé</h2>
-    <p style="color:#757575;margin-bottom:1.5rem">Vous n'avez pas les droits nécessaires pour accéder à cette page.</p>
-    <a href="${pageContext.request.contextPath}/" class="btn btn-primary">🏠 Retour à l'accueil</a>
+<body class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+<div class="text-center bg-white rounded-2xl shadow-lg p-10 max-w-md w-full">
+    <div class="text-8xl font-extrabold text-red-600 mb-2">403</div>
+    <h1 class="text-2xl font-bold text-gray-800 mb-2">Acces refuse</h1>
+    <p class="text-gray-500 mb-6">Vous n'avez pas les droits necessaires pour acceder a cette page.</p>
+    <a href="${pageContext.request.contextPath}/"
+       class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold rounded-lg bg-indigo-700 text-white hover:bg-indigo-800 transition-colors">
+        Retour a l'accueil
+    </a>
 </div>
 </body>
 </html>

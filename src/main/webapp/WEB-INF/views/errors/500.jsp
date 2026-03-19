@@ -4,15 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Erreur serveur — GestionLoc</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f0f2f8">
-<div style="text-align:center;background:#fff;padding:3rem;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.1);max-width:450px">
-    <p style="font-size:5rem;margin-bottom:.5rem">⚙️</p>
-    <h1 style="font-size:4rem;color:#e65100;font-weight:800">500</h1>
-    <h2 style="color:#424242;margin-bottom:.8rem">Erreur interne</h2>
-    <p style="color:#757575;margin-bottom:1.5rem">Une erreur inattendue s'est produite. Veuillez réessayer.</p>
-    <a href="${pageContext.request.contextPath}/" class="btn btn-primary">🏠 Retour à l'accueil</a>
+<body class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+<div class="text-center bg-white rounded-2xl shadow-lg p-10 max-w-md w-full">
+    <div class="text-8xl font-extrabold text-orange-600 mb-2">500</div>
+    <h1 class="text-2xl font-bold text-gray-800 mb-2">Erreur interne</h1>
+    <p class="text-gray-500 mb-6">Une erreur inattendue s'est produite. Veuillez reessayer.</p>
+    <a href="${pageContext.request.contextPath}/"
+       class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold rounded-lg bg-indigo-700 text-white hover:bg-indigo-800 transition-colors">
+        Retour a l'accueil
+    </a>
 </div>
 </body>
 </html>

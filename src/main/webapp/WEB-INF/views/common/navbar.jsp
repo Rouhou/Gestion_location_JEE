@@ -1,102 +1,116 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<aside class="sidebar">
-    <div class="sidebar-brand">
-        <span class="icon">🏢</span>
-        <span>GestionLoc</span>
+<aside class="w-64 bg-indigo-900 text-white flex flex-col shrink-0 h-screen sticky top-0 overflow-y-auto">
+    <div class="px-5 py-5 flex items-center gap-2 border-b border-indigo-800">
+        <span class="font-bold text-lg tracking-tight">GestionLoc</span>
     </div>
-    <nav class="sidebar-nav">
+    <nav class="flex-1 py-4 px-3 flex flex-col gap-0.5">
         <c:choose>
-            <%-- ══ ADMIN ══ --%>
+            <%-- ADMIN --%>
             <c:when test="${sessionScope.role eq 'ADMIN'}">
-                <div class="sidebar-section">Administration</div>
+                <div class="text-xs font-semibold text-indigo-400 uppercase tracking-wider px-3 py-2 mt-1">Administration</div>
                 <a href="${pageContext.request.contextPath}/admin/dashboard"
-                   class="sidebar-link ${pageContext.request.servletPath.contains('dashboard') ? 'active' : ''}">
-                    <span class="nav-icon">📊</span><span>Tableau de bord</span>
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors
+                   ${pageContext.request.servletPath.contains('dashboard') ? 'bg-indigo-700 text-white font-medium' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white'}">
+                    Tableau de bord
                 </a>
                 <a href="${pageContext.request.contextPath}/admin/utilisateurs"
-                   class="sidebar-link ${pageContext.request.servletPath.contains('utilisateur') ? 'active' : ''}">
-                    <span class="nav-icon">👥</span><span>Utilisateurs</span>
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors
+                   ${pageContext.request.servletPath.contains('utilisateur') ? 'bg-indigo-700 text-white font-medium' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white'}">
+                    Utilisateurs
                 </a>
-                <div class="sidebar-section">Gestion</div>
+                <div class="text-xs font-semibold text-indigo-400 uppercase tracking-wider px-3 py-2 mt-3">Gestion</div>
                 <a href="${pageContext.request.contextPath}/admin/immeubles"
-                   class="sidebar-link ${pageContext.request.servletPath.contains('immeuble') ? 'active' : ''}">
-                    <span class="nav-icon">🏗️</span><span>Immeubles</span>
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors
+                   ${pageContext.request.servletPath.contains('immeuble') ? 'bg-indigo-700 text-white font-medium' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white'}">
+                    Immeubles
                 </a>
                 <a href="${pageContext.request.contextPath}/admin/contrats"
-                   class="sidebar-link ${pageContext.request.servletPath.contains('contrat') ? 'active' : ''}">
-                    <span class="nav-icon">📄</span><span>Contrats</span>
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors
+                   ${pageContext.request.servletPath.contains('contrat') ? 'bg-indigo-700 text-white font-medium' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white'}">
+                    Contrats
                 </a>
                 <a href="${pageContext.request.contextPath}/admin/paiements"
-                   class="sidebar-link ${pageContext.request.servletPath.contains('paiement') ? 'active' : ''}">
-                    <span class="nav-icon">💰</span><span>Paiements</span>
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors
+                   ${pageContext.request.servletPath.contains('paiement') ? 'bg-indigo-700 text-white font-medium' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white'}">
+                    Paiements
                 </a>
                 <a href="${pageContext.request.contextPath}/admin/rapports"
-                   class="sidebar-link ${pageContext.request.servletPath.contains('rapport') ? 'active' : ''}">
-                    <span class="nav-icon">📈</span><span>Rapports</span>
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors
+                   ${pageContext.request.servletPath.contains('rapport') ? 'bg-indigo-700 text-white font-medium' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white'}">
+                    Rapports
                 </a>
             </c:when>
 
-            <%-- ══ PROPRIÉTAIRE ══ --%>
+            <%-- PROPRIETAIRE --%>
             <c:when test="${sessionScope.role eq 'PROPRIETAIRE'}">
-                <div class="sidebar-section">Mon Patrimoine</div>
+                <div class="text-xs font-semibold text-indigo-400 uppercase tracking-wider px-3 py-2 mt-1">Mon Patrimoine</div>
                 <a href="${pageContext.request.contextPath}/proprietaire/dashboard"
-                   class="sidebar-link ${pageContext.request.servletPath.contains('dashboard') ? 'active' : ''}">
-                    <span class="nav-icon">📊</span><span>Tableau de bord</span>
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors
+                   ${pageContext.request.servletPath.contains('dashboard') ? 'bg-indigo-700 text-white font-medium' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white'}">
+                    Tableau de bord
                 </a>
                 <a href="${pageContext.request.contextPath}/proprietaire/immeubles"
-                   class="sidebar-link ${pageContext.request.servletPath.contains('immeuble') ? 'active' : ''}">
-                    <span class="nav-icon">🏗️</span><span>Mes Immeubles</span>
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors
+                   ${pageContext.request.servletPath.contains('immeuble') ? 'bg-indigo-700 text-white font-medium' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white'}">
+                    Mes Immeubles
                 </a>
                 <a href="${pageContext.request.contextPath}/proprietaire/unites"
-                   class="sidebar-link ${pageContext.request.servletPath.contains('unite') ? 'active' : ''}">
-                    <span class="nav-icon">🚪</span><span>Unités de location</span>
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors
+                   ${pageContext.request.servletPath.contains('unite') ? 'bg-indigo-700 text-white font-medium' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white'}">
+                    Unites de location
                 </a>
-                <div class="sidebar-section">Locations</div>
+                <div class="text-xs font-semibold text-indigo-400 uppercase tracking-wider px-3 py-2 mt-3">Locations</div>
                 <a href="${pageContext.request.contextPath}/proprietaire/contrats"
-                   class="sidebar-link ${pageContext.request.servletPath.contains('contrat') ? 'active' : ''}">
-                    <span class="nav-icon">📄</span><span>Contrats</span>
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors
+                   ${pageContext.request.servletPath.contains('contrat') ? 'bg-indigo-700 text-white font-medium' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white'}">
+                    Contrats
                 </a>
                 <a href="${pageContext.request.contextPath}/proprietaire/paiements"
-                   class="sidebar-link ${pageContext.request.servletPath.contains('paiement') ? 'active' : ''}">
-                    <span class="nav-icon">💰</span><span>Paiements</span>
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors
+                   ${pageContext.request.servletPath.contains('paiement') ? 'bg-indigo-700 text-white font-medium' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white'}">
+                    Paiements
                 </a>
                 <a href="${pageContext.request.contextPath}/proprietaire/demandes"
-                   class="sidebar-link ${pageContext.request.servletPath.contains('demande') ? 'active' : ''}">
-                    <span class="nav-icon">📬</span><span>Demandes</span>
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors
+                   ${pageContext.request.servletPath.contains('demande') ? 'bg-indigo-700 text-white font-medium' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white'}">
+                    Demandes
                 </a>
             </c:when>
 
-            <%-- ══ LOCATAIRE ══ --%>
+            <%-- LOCATAIRE --%>
             <c:otherwise>
-                <div class="sidebar-section">Recherche</div>
+                <div class="text-xs font-semibold text-indigo-400 uppercase tracking-wider px-3 py-2 mt-1">Recherche</div>
                 <a href="${pageContext.request.contextPath}/locataire/offres"
-                   class="sidebar-link ${pageContext.request.servletPath.contains('offre') ? 'active' : ''}">
-                    <span class="nav-icon">🔍</span><span>Offres disponibles</span>
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors
+                   ${pageContext.request.servletPath.contains('offre') ? 'bg-indigo-700 text-white font-medium' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white'}">
+                    Offres disponibles
                 </a>
-                <div class="sidebar-section">Mon Espace</div>
+                <div class="text-xs font-semibold text-indigo-400 uppercase tracking-wider px-3 py-2 mt-3">Mon Espace</div>
                 <a href="${pageContext.request.contextPath}/locataire/mes-contrats"
-                   class="sidebar-link ${pageContext.request.servletPath.contains('contrat') ? 'active' : ''}">
-                    <span class="nav-icon">📄</span><span>Mes contrats</span>
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors
+                   ${pageContext.request.servletPath.contains('contrat') ? 'bg-indigo-700 text-white font-medium' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white'}">
+                    Mes contrats
                 </a>
                 <a href="${pageContext.request.contextPath}/locataire/mes-paiements"
-                   class="sidebar-link ${pageContext.request.servletPath.contains('paiement') ? 'active' : ''}">
-                    <span class="nav-icon">💸</span><span>Mes paiements</span>
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors
+                   ${pageContext.request.servletPath.contains('paiement') ? 'bg-indigo-700 text-white font-medium' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white'}">
+                    Mes paiements
                 </a>
                 <a href="${pageContext.request.contextPath}/locataire/mes-demandes"
-                   class="sidebar-link ${pageContext.request.servletPath.contains('demande') ? 'active' : ''}">
-                    <span class="nav-icon">📬</span><span>Mes demandes</span>
+                   class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors
+                   ${pageContext.request.servletPath.contains('demande') ? 'bg-indigo-700 text-white font-medium' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white'}">
+                    Mes demandes
                 </a>
             </c:otherwise>
         </c:choose>
     </nav>
-    <div class="sidebar-footer">
-        <div class="sidebar-user">
-            <strong>${sessionScope.utilisateur.prenom} ${sessionScope.utilisateur.nom}</strong>
-            ${sessionScope.role}
-        </div>
-        <a href="${pageContext.request.contextPath}/logout" class="btn btn-outline btn-sm" style="width:100%;justify-content:center;">
-            🚪 Déconnexion
+    <div class="px-4 py-4 border-t border-indigo-800 shrink-0">
+        <p class="text-sm font-semibold text-white truncate">${sessionScope.utilisateur.prenom} ${sessionScope.utilisateur.nom}</p>
+        <p class="text-xs text-indigo-300 mb-3">${sessionScope.role}</p>
+        <a href="${pageContext.request.contextPath}/logout"
+           class="block text-center px-4 py-2 rounded-lg border border-indigo-600 text-indigo-200 hover:bg-indigo-800 hover:text-white text-sm transition-colors">
+            Deconnexion
         </a>
     </div>
 </aside>

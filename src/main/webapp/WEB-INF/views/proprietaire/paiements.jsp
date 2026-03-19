@@ -6,124 +6,117 @@
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Paiements — GestionLoc</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<div class="layout">
+<body class="bg-gray-50">
+<div class="flex h-screen overflow-hidden">
     <jsp:include page="/WEB-INF/views/common/navbar.jsp"/>
-    <div class="main-content">
-        <div class="topbar">
-            <span class="topbar-title">💰 Suivi des Paiements</span>
+    <div class="flex-1 flex flex-col overflow-auto">
+
+        <div class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200 shrink-0">
+            <span class="font-semibold text-gray-800 text-lg">Suivi des Paiements</span>
         </div>
-        <div class="page-body">
-            <c:if test="${not empty message}"><div class="alert alert-success">✅ ${message}</div></c:if>
+
+        <div class="flex-1 p-6 flex flex-col gap-5">
+            <c:if test="${not empty message}"><div class="px-4 py-3 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm">${message}</div></c:if>
 
             <%-- Compteurs rapides --%>
-            <div class="stats-grid" style="margin-bottom:1.5rem">
-                <div class="stat-card orange">
-                    <span class="stat-icon">⏳</span>
-                    <span class="stat-value">${nbEnAttente}</span>
-                    <span class="stat-label">En attente</span>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white rounded-xl border-l-4 border-l-amber-500 border border-gray-200 p-4 shadow-sm">
+                    <div class="text-2xl font-bold text-gray-800">${nbEnAttente}</div>
+                    <div class="text-xs text-gray-500 mt-0.5">En attente</div>
                 </div>
-                <div class="stat-card green">
-                    <span class="stat-icon">✅</span>
-                    <span class="stat-value">${nbValides}</span>
-                    <span class="stat-label">Validés</span>
+                <div class="bg-white rounded-xl border-l-4 border-l-green-500 border border-gray-200 p-4 shadow-sm">
+                    <div class="text-2xl font-bold text-gray-800">${nbValides}</div>
+                    <div class="text-xs text-gray-500 mt-0.5">Valides</div>
                 </div>
-                <div class="stat-card red">
-                    <span class="stat-icon">❌</span>
-                    <span class="stat-value">${nbRejetes}</span>
-                    <span class="stat-label">Rejetés</span>
+                <div class="bg-white rounded-xl border-l-4 border-l-red-500 border border-gray-200 p-4 shadow-sm">
+                    <div class="text-2xl font-bold text-gray-800">${nbRejetes}</div>
+                    <div class="text-xs text-gray-500 mt-0.5">Rejetes</div>
                 </div>
-                <div class="stat-card blue">
-                    <span class="stat-icon">💵</span>
-                    <span class="stat-value"><fmt:formatNumber value="${totalValide}" pattern="#,##0"/> F</span>
-                    <span class="stat-label">Total encaissé</span>
+                <div class="bg-white rounded-xl border-l-4 border-l-indigo-500 border border-gray-200 p-4 shadow-sm">
+                    <div class="text-2xl font-bold text-gray-800">
+                        <fmt:formatNumber value="${totalValide}" pattern="#,##0"/> F
+                    </div>
+                    <div class="text-xs text-gray-500 mt-0.5">Total encaisse</div>
                 </div>
             </div>
 
             <%-- Filtres --%>
-            <div class="filter-bar">
-                <input type="text" id="searchInput" placeholder="🔍 Locataire, unité..." onkeyup="filterTable()"/>
-                <select id="statutFilter" onchange="filterTable()">
+            <div class="flex items-center gap-3 flex-wrap">
+                <input type="text" id="searchInput" placeholder="Locataire, unite..." onkeyup="filterTable()"
+                       class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"/>
+                <select id="statutFilter" onchange="filterTable()"
+                        class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
                     <option value="">Tous les statuts</option>
                     <option value="en_attente">En attente</option>
-                    <option value="valide">Validé</option>
-                    <option value="rejete">Rejeté</option>
+                    <option value="valide">Valide</option>
+                    <option value="rejete">Rejete</option>
                 </select>
-                <input type="month" id="moisFilter" onchange="filterTable()" title="Filtrer par mois"/>
+                <input type="month" id="moisFilter" onchange="filterTable()" title="Filtrer par mois"
+                       class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"/>
             </div>
 
-            <div class="card">
-                <div class="card-header"><h2>Liste des paiements (${paiements.size()})</h2></div>
-                <div class="table-wrap">
-                    <table id="payTable">
-                        <thead>
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+                <div class="px-5 py-4 border-b border-gray-100">
+                    <h2 class="font-semibold text-gray-800">Liste des paiements (${paiements.size()})</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table id="payTable" class="w-full text-sm">
+                        <thead class="bg-gray-50 border-b border-gray-100">
                             <tr>
-                                <th>Locataire</th>
-                                <th>Immeuble / Unité</th>
-                                <th>Mois concerné</th>
-                                <th>Montant</th>
-                                <th>Mode</th>
-                                <th>Date paiement</th>
-                                <th>Statut</th>
-                                <th>Actions</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Locataire</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Immeuble / Unite</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Mois concerne</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Montant</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Mode</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Date paiement</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Statut</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="divide-y divide-gray-50">
                         <c:if test="${empty paiements}">
-                            <tr>
-                                <td colspan="8" style="text-align:center;padding:2.5rem;color:#9e9e9e">
-                                    Aucun paiement enregistré.
-                                </td>
-                            </tr>
+                            <tr><td colspan="8" class="text-center px-5 py-8 text-gray-400">Aucun paiement enregistre.</td></tr>
                         </c:if>
                         <c:forEach var="p" items="${paiements}">
-                            <tr>
-                                <td>
-                                    <strong>${p.contrat.locataire.prenom} ${p.contrat.locataire.nom}</strong><br>
-                                    <small style="color:#9e9e9e">${p.contrat.locataire.telephone}</small>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-5 py-3">
+                                    <div class="font-medium text-gray-800">${p.contrat.locataire.prenom} ${p.contrat.locataire.nom}</div>
+                                    <div class="text-xs text-gray-400">${p.contrat.locataire.telephone}</div>
                                 </td>
-                                <td>
-                                    ${p.contrat.unite.immeuble.nom}<br>
-                                    <small style="color:#9e9e9e">Unité ${p.contrat.unite.numero}</small>
+                                <td class="px-5 py-3">
+                                    <div class="text-gray-800">${p.contrat.unite.immeuble.nom}</div>
+                                    <div class="text-xs text-gray-400">Unite ${p.contrat.unite.numero}</div>
                                 </td>
-                                <td>${p.moisConcerne}</td>
-                                <td><strong><fmt:formatNumber value="${p.montant}" pattern="#,##0"/> F CFA</strong></td>
-                                <td>${p.modePaiement}</td>
-                                <td>${p.datePaiementFormattee}</td>
-                                <td>
+                                <td class="px-5 py-3 text-gray-600">${p.moisConcerne}</td>
+                                <td class="px-5 py-3 font-semibold text-gray-800">
+                                    <fmt:formatNumber value="${p.montant}" pattern="#,##0"/> F CFA
+                                </td>
+                                <td class="px-5 py-3 text-gray-600">${p.modePaiement}</td>
+                                <td class="px-5 py-3 text-gray-600">${p.datePaiementFormattee}</td>
+                                <td class="px-5 py-3">
                                     <c:choose>
-                                        <c:when test="${p.statut eq 'VALIDE'}">
-                                            <span class="badge badge-green">✅ Validé</span>
-                                        </c:when>
-                                        <c:when test="${p.statut eq 'REJETE'}">
-                                            <span class="badge badge-red">❌ Rejeté</span>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <span class="badge badge-orange">⏳ En attente</span>
-                                        </c:otherwise>
+                                        <c:when test="${p.statut eq 'VALIDE'}"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Valide</span></c:when>
+                                        <c:when test="${p.statut eq 'REJETE'}"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Rejete</span></c:when>
+                                        <c:otherwise><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">En attente</span></c:otherwise>
                                     </c:choose>
                                 </td>
-                                <td>
+                                <td class="px-5 py-3">
                                     <c:if test="${p.statut eq 'EN_ATTENTE'}">
-                                        <form method="post"
-                                              action="${pageContext.request.contextPath}/proprietaire/paiements"
-                                              style="display:inline">
-                                            <input type="hidden" name="id" value="${p.id}"/>
-                                            <input type="hidden" name="action" value="valider"/>
-                                            <button type="submit" class="btn btn-success btn-sm"
-                                                    title="Valider ce paiement">✅</button>
-                                        </form>
-                                        <form method="post"
-                                              action="${pageContext.request.contextPath}/proprietaire/paiements"
-                                              style="display:inline">
-                                            <input type="hidden" name="id" value="${p.id}"/>
-                                            <input type="hidden" name="action" value="rejeter"/>
-                                            <button type="submit" class="btn btn-danger btn-sm"
-                                                    title="Rejeter ce paiement"
-                                                    onclick="return confirm('Rejeter ce paiement ?')">❌</button>
-                                        </form>
+                                        <div class="flex items-center gap-2">
+                                            <form method="post" action="${pageContext.request.contextPath}/proprietaire/paiements" class="inline">
+                                                <input type="hidden" name="id" value="${p.id}"/>
+                                                <input type="hidden" name="action" value="valider"/>
+                                                <button type="submit" class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors">Valider</button>
+                                            </form>
+                                            <form method="post" action="${pageContext.request.contextPath}/proprietaire/paiements" class="inline">
+                                                <input type="hidden" name="id" value="${p.id}"/>
+                                                <input type="hidden" name="action" value="rejeter"/>
+                                                <button type="submit" onclick="return confirm('Rejeter ce paiement ?')"
+                                                        class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors">Rejeter</button>
+                                            </form>
+                                        </div>
                                     </c:if>
                                 </td>
                             </tr>

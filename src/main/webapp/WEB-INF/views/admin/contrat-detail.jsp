@@ -5,114 +5,157 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Détail contrat — GestionLoc Admin</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
+    <title>Detail contrat — GestionLoc Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<div class="layout">
+<body class="bg-gray-50">
+<div class="flex h-screen overflow-hidden">
     <jsp:include page="/WEB-INF/views/common/navbar.jsp"/>
-    <div class="main-content">
-        <div class="topbar">
-            <span class="topbar-title">📄 Détail du Contrat #${contrat.id}</span>
-            <div style="display:flex;gap:.6rem">
-                <a href="${pageContext.request.contextPath}/admin/contrats" class="btn btn-outline btn-sm">← Retour</a>
+    <div class="flex-1 flex flex-col overflow-auto">
+
+        <div class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200 shrink-0">
+            <span class="font-semibold text-gray-800 text-lg">Detail du Contrat #${contrat.id}</span>
+            <div class="flex items-center gap-2">
+                <a href="${pageContext.request.contextPath}/admin/contrats"
+                   class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
+                    Retour
+                </a>
                 <c:if test="${contrat.statut eq 'ACTIF'}">
-                    <form method="post" action="${pageContext.request.contextPath}/admin/contrats">
+                    <form method="post" action="${pageContext.request.contextPath}/admin/contrats" class="inline">
                         <input type="hidden" name="action" value="resilier"/>
                         <input type="hidden" name="id" value="${contrat.id}"/>
-                        <button class="btn btn-danger btn-sm"
-                                onclick="return confirm('Résilier ce contrat ?')">🚫 Résilier</button>
+                        <button class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors"
+                                onclick="return confirm('Resilier ce contrat ?')">Resilier</button>
                     </form>
                 </c:if>
             </div>
         </div>
-        <div class="page-body">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.3rem">
+
+        <div class="flex-1 p-6 flex flex-col gap-5">
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
 
                 <%-- Infos contrat --%>
-                <div class="card">
-                    <div class="card-header"><h2>📋 Informations du contrat</h2></div>
-                    <div class="card-body">
-                        <table style="width:100%;font-size:.9rem">
-                            <tr><td style="color:#9e9e9e;padding:.4rem 0">Statut</td>
-                                <td>
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+                    <div class="px-5 py-4 border-b border-gray-100">
+                        <h2 class="font-semibold text-gray-800">Informations du contrat</h2>
+                    </div>
+                    <div class="p-5">
+                        <dl class="divide-y divide-gray-50">
+                            <div class="flex items-center justify-between py-2.5">
+                                <dt class="text-sm text-gray-500">Statut</dt>
+                                <dd>
                                     <c:choose>
-                                        <c:when test="${contrat.statut eq 'ACTIF'}"><span class="badge badge-green">✅ Actif</span></c:when>
-                                        <c:when test="${contrat.statut eq 'TERMINE'}"><span class="badge badge-gray">Terminé</span></c:when>
-                                        <c:otherwise><span class="badge badge-red">🚫 Résilié</span></c:otherwise>
+                                        <c:when test="${contrat.statut eq 'ACTIF'}"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Actif</span></c:when>
+                                        <c:when test="${contrat.statut eq 'TERMINE'}"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">Termine</span></c:when>
+                                        <c:otherwise><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Resilie</span></c:otherwise>
                                     </c:choose>
-                                </td>
-                            </tr>
-                            <tr><td style="color:#9e9e9e;padding:.4rem 0">Date début</td>
-                                <td><td>${contrat.dateDebutFormattee}</td></td></tr>
-                            <tr><td style="color:#9e9e9e;padding:.4rem 0">Date fin</td>
-                                <td>${not empty contrat.dateDebutFormattee ? contrat.dateDebutFormattee : '—'}</td></tr>
-                            <tr><td style="color:#9e9e9e;padding:.4rem 0">Loyer convenu</td>
-                                <td><strong><fmt:formatNumber value="${contrat.loyerConvenu}" pattern="#,##0"/> F CFA</strong></td></tr>
-                            <tr><td style="color:#9e9e9e;padding:.4rem 0">Dépôt de garantie</td>
-                                <td><fmt:formatNumber value="${contrat.depotGarantie}" pattern="#,##0"/> F CFA</td></tr>
-                        </table>
+                                </dd>
+                            </div>
+                            <div class="flex items-center justify-between py-2.5">
+                                <dt class="text-sm text-gray-500">Date debut</dt>
+                                <dd class="text-sm font-medium text-gray-800">${contrat.dateDebutFormattee}</dd>
+                            </div>
+                            <div class="flex items-center justify-between py-2.5">
+                                <dt class="text-sm text-gray-500">Date fin</dt>
+                                <dd class="text-sm text-gray-800">${not empty contrat.dateFinFormattee ? contrat.dateFinFormattee : '—'}</dd>
+                            </div>
+                            <div class="flex items-center justify-between py-2.5">
+                                <dt class="text-sm text-gray-500">Loyer convenu</dt>
+                                <dd class="text-sm font-bold text-indigo-700">
+                                    <fmt:formatNumber value="${contrat.loyerConvenu}" pattern="#,##0"/> F CFA
+                                </dd>
+                            </div>
+                            <div class="flex items-center justify-between py-2.5">
+                                <dt class="text-sm text-gray-500">Depot de garantie</dt>
+                                <dd class="text-sm text-gray-800">
+                                    <fmt:formatNumber value="${contrat.depotGarantie}" pattern="#,##0"/> F CFA
+                                </dd>
+                            </div>
+                        </dl>
                     </div>
                 </div>
 
                 <%-- Parties --%>
-                <div class="card">
-                    <div class="card-header"><h2>👥 Parties concernées</h2></div>
-                    <div class="card-body">
-                        <p style="font-size:.8rem;color:#9e9e9e;text-transform:uppercase;margin-bottom:.3rem">Locataire</p>
-                        <p><strong>${contrat.locataire.prenom} ${contrat.locataire.nom}</strong></p>
-                        <p style="color:#9e9e9e;font-size:.85rem">${contrat.locataire.email}</p>
-                        <p style="color:#9e9e9e;font-size:.85rem">${contrat.locataire.telephone}</p>
-                        <hr style="margin:1rem 0;border:none;border-top:1px solid #e0e0e0"/>
-                        <p style="font-size:.8rem;color:#9e9e9e;text-transform:uppercase;margin-bottom:.3rem">Unité</p>
-                        <p><strong>${contrat.unite.immeuble.nom}</strong> — Unité ${contrat.unite.numero}</p>
-                        <p style="color:#9e9e9e;font-size:.85rem">${contrat.unite.immeuble.adresse}, ${contrat.unite.immeuble.ville}</p>
-                        <p style="color:#9e9e9e;font-size:.85rem">${contrat.unite.nbPieces} pièces — <fmt:formatNumber value="${contrat.unite.superficie}" pattern="#,##0.##"/> m²</p>
-                        <hr style="margin:1rem 0;border:none;border-top:1px solid #e0e0e0"/>
-                        <p style="font-size:.8rem;color:#9e9e9e;text-transform:uppercase;margin-bottom:.3rem">Propriétaire</p>
-                        <p><strong>${contrat.unite.immeuble.proprietaire.prenom} ${contrat.unite.immeuble.proprietaire.nom}</strong></p>
-                        <p style="color:#9e9e9e;font-size:.85rem">${contrat.unite.immeuble.proprietaire.email}</p>
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+                    <div class="px-5 py-4 border-b border-gray-100">
+                        <h2 class="font-semibold text-gray-800">Parties concernees</h2>
+                    </div>
+                    <div class="p-5 flex flex-col gap-4">
+                        <div>
+                            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Locataire</p>
+                            <p class="font-semibold text-gray-800">${contrat.locataire.prenom} ${contrat.locataire.nom}</p>
+                            <p class="text-sm text-gray-500">${contrat.locataire.email}</p>
+                            <p class="text-sm text-gray-500">${contrat.locataire.telephone}</p>
+                        </div>
+                        <hr class="border-gray-100"/>
+                        <div>
+                            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Unite</p>
+                            <p class="font-semibold text-gray-800">${contrat.unite.immeuble.nom}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 ml-1">Unite ${contrat.unite.numero}</span>
+                            </p>
+                            <p class="text-sm text-gray-500">${contrat.unite.immeuble.adresse}, ${contrat.unite.immeuble.ville}</p>
+                            <p class="text-sm text-gray-500">${contrat.unite.nbPieces} pieces —
+                                <fmt:formatNumber value="${contrat.unite.superficie}" pattern="#,##0.##"/> m²</p>
+                        </div>
+                        <hr class="border-gray-100"/>
+                        <div>
+                            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Proprietaire</p>
+                            <p class="font-semibold text-gray-800">${contrat.unite.immeuble.proprietaire.prenom} ${contrat.unite.immeuble.proprietaire.nom}</p>
+                            <p class="text-sm text-gray-500">${contrat.unite.immeuble.proprietaire.email}</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <%-- Historique paiements --%>
-            <div class="card" style="margin-top:1.3rem">
-                <div class="card-header"><h2>💳 Historique des paiements</h2></div>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr><th>Mois</th><th>Montant</th><th>Mode</th><th>Date paiement</th><th>Statut</th><th>Actions</th></tr>
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+                <div class="px-5 py-4 border-b border-gray-100">
+                    <h2 class="font-semibold text-gray-800">Historique des paiements</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50 border-b border-gray-100">
+                            <tr>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Mois</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Montant</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Mode</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Date paiement</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Statut</th>
+                                <th class="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">Actions</th>
+                            </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="divide-y divide-gray-50">
                         <c:if test="${empty contrat.paiements}">
-                            <tr><td colspan="6" style="text-align:center;padding:1.5rem;color:#9e9e9e">Aucun paiement enregistré.</td></tr>
+                            <tr><td colspan="6" class="text-center px-5 py-8 text-gray-400">Aucun paiement enregistre.</td></tr>
                         </c:if>
                         <c:forEach var="p" items="${contrat.paiements}">
-                            <tr>
-                                <td>${p.moisConcerne}</td>
-                                <td><strong><fmt:formatNumber value="${p.montant}" pattern="#,##0"/> F</strong></td>
-                                <td>${p.modePaiement}</td>
-                                <td><fmt:formatDate value="${p.datePaiement}" pattern="dd/MM/yyyy"/></td>
-                                <td>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-5 py-3 text-gray-700">${p.moisConcerne}</td>
+                                <td class="px-5 py-3 font-semibold text-gray-800"><fmt:formatNumber value="${p.montant}" pattern="#,##0"/> F</td>
+                                <td class="px-5 py-3 text-gray-600">${p.modePaiement}</td>
+                                <td class="px-5 py-3 text-gray-600"><fmt:formatDate value="${p.datePaiement}" pattern="dd/MM/yyyy"/></td>
+                                <td class="px-5 py-3">
                                     <c:choose>
-                                        <c:when test="${p.statut eq 'VALIDE'}"><span class="badge badge-green">✅ Validé</span></c:when>
-                                        <c:when test="${p.statut eq 'REJETE'}"><span class="badge badge-red">❌ Rejeté</span></c:when>
-                                        <c:otherwise><span class="badge badge-orange">⏳ En attente</span></c:otherwise>
+                                        <c:when test="${p.statut eq 'VALIDE'}"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Valide</span></c:when>
+                                        <c:when test="${p.statut eq 'REJETE'}"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Rejete</span></c:when>
+                                        <c:otherwise><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">En attente</span></c:otherwise>
                                     </c:choose>
                                 </td>
-                                <td>
+                                <td class="px-5 py-3">
                                     <c:if test="${p.statut eq 'EN_ATTENTE'}">
-                                        <form method="post" action="${pageContext.request.contextPath}/admin/paiements" style="display:inline">
-                                            <input type="hidden" name="id" value="${p.id}"/>
-                                            <input type="hidden" name="action" value="valider"/>
-                                            <button class="btn btn-success btn-sm">✅</button>
-                                        </form>
-                                        <form method="post" action="${pageContext.request.contextPath}/admin/paiements" style="display:inline">
-                                            <input type="hidden" name="id" value="${p.id}"/>
-                                            <input type="hidden" name="action" value="rejeter"/>
-                                            <button class="btn btn-danger btn-sm">❌</button>
-                                        </form>
+                                        <div class="flex items-center gap-2">
+                                            <form method="post" action="${pageContext.request.contextPath}/admin/paiements" class="inline">
+                                                <input type="hidden" name="id" value="${p.id}"/>
+                                                <input type="hidden" name="action" value="valider"/>
+                                                <button class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors">Valider</button>
+                                            </form>
+                                            <form method="post" action="${pageContext.request.contextPath}/admin/paiements" class="inline">
+                                                <input type="hidden" name="id" value="${p.id}"/>
+                                                <input type="hidden" name="action" value="rejeter"/>
+                                                <button class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors">Rejeter</button>
+                                            </form>
+                                        </div>
                                     </c:if>
                                 </td>
                             </tr>

@@ -6,80 +6,95 @@
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Mes contrats — GestionLoc</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<div class="layout">
+<body class="bg-gray-50">
+<div class="flex h-screen overflow-hidden">
     <jsp:include page="/WEB-INF/views/common/navbar.jsp"/>
-    <div class="main-content">
-        <div class="topbar"><span class="topbar-title">📄 Mes Contrats</span></div>
-        <div class="page-body">
+    <div class="flex-1 flex flex-col overflow-auto">
+
+        <div class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200 shrink-0">
+            <span class="font-semibold text-gray-800 text-lg">Mes Contrats</span>
+        </div>
+
+        <div class="flex-1 p-6 flex flex-col gap-5">
+
             <c:if test="${empty contrats}">
-                <div class="card" style="text-align:center;padding:3rem">
-                    <p style="font-size:3rem">📄</p>
-                    <p style="color:#757575">Vous n'avez aucun contrat de location actif.</p>
-                    <a href="${pageContext.request.contextPath}/locataire/offres" class="btn btn-primary" style="margin-top:1rem">Voir les offres disponibles</a>
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-12 text-center">
+                    <p class="text-gray-800 font-medium mb-1">Aucun contrat de location actif</p>
+                    <p class="text-gray-400 text-sm mb-4">Vous n'avez aucun contrat de location pour le moment.</p>
+                    <a href="${pageContext.request.contextPath}/locataire/offres"
+                       class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-indigo-700 text-white hover:bg-indigo-800 transition-colors">
+                        Voir les offres disponibles
+                    </a>
                 </div>
             </c:if>
 
             <c:forEach var="c" items="${contrats}">
-            <div class="card" style="margin-bottom:1.3rem">
-                <div class="card-header">
-                    <h2>📍 ${c.unite.immeuble.nom} — Unité ${c.unite.numero}</h2>
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+                <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+                    <h2 class="font-semibold text-gray-800">${c.unite.immeuble.nom} — Unite ${c.unite.numero}</h2>
                     <c:choose>
-                        <c:when test="${c.statut eq 'ACTIF'}"><span class="badge badge-green">🟢 Actif</span></c:when>
-                        <c:when test="${c.statut eq 'TERMINE'}"><span class="badge badge-gray">Terminé</span></c:when>
-                        <c:otherwise><span class="badge badge-red">Résilié</span></c:otherwise>
+                        <c:when test="${c.statut eq 'ACTIF'}"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Actif</span></c:when>
+                        <c:when test="${c.statut eq 'TERMINE'}"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">Termine</span></c:when>
+                        <c:otherwise><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">Resilie</span></c:otherwise>
                     </c:choose>
                 </div>
-                <div class="card-body">
-                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;margin-bottom:1.2rem">
+                <div class="p-5">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
                         <div>
-                            <span style="font-size:.75rem;color:#9e9e9e;text-transform:uppercase">Adresse</span>
-                            <p style="font-weight:600">${c.unite.immeuble.adresse}, ${c.unite.immeuble.ville}</p>
+                            <div class="text-xs text-gray-400 uppercase font-semibold">Adresse</div>
+                            <p class="text-sm font-medium text-gray-700 mt-0.5">${c.unite.immeuble.adresse}, ${c.unite.immeuble.ville}</p>
                         </div>
                         <div>
-                            <span style="font-size:.75rem;color:#9e9e9e;text-transform:uppercase">Date de début</span>
-                            <p style="font-weight:600">${c.dateDebutFormattee}</p>
+                            <div class="text-xs text-gray-400 uppercase font-semibold">Date de debut</div>
+                            <p class="text-sm font-medium text-gray-700 mt-0.5">${c.dateDebutFormattee}</p>
                         </div>
                         <div>
-                            <span style="font-size:.75rem;color:#9e9e9e;text-transform:uppercase">Loyer mensuel</span>
-                            <p style="font-weight:600;color:#1a237e"><fmt:formatNumber value="${c.loyerConvenu}" pattern="#,##0"/> F CFA</p>
+                            <div class="text-xs text-gray-400 uppercase font-semibold">Loyer mensuel</div>
+                            <p class="text-sm font-bold text-indigo-700 mt-0.5">
+                                <fmt:formatNumber value="${c.loyerConvenu}" pattern="#,##0"/> F CFA
+                            </p>
                         </div>
                         <div>
-                            <span style="font-size:.75rem;color:#9e9e9e;text-transform:uppercase">Dépôt de garantie</span>
-                            <p style="font-weight:600"><fmt:formatNumber value="${c.depotGarantie}" pattern="#,##0"/> F CFA</p>
+                            <div class="text-xs text-gray-400 uppercase font-semibold">Depot de garantie</div>
+                            <p class="text-sm font-medium text-gray-700 mt-0.5">
+                                <fmt:formatNumber value="${c.depotGarantie}" pattern="#,##0"/> F CFA
+                            </p>
                         </div>
                     </div>
 
                     <%-- Historique paiements --%>
-                    <h3 style="font-size:.9rem;color:#1a237e;margin-bottom:.8rem">💳 Historique des paiements</h3>
+                    <h3 class="text-sm font-semibold text-indigo-700 mb-3">Historique des paiements</h3>
                     <c:if test="${empty c.paiements}">
-                        <p style="color:#9e9e9e;font-size:.87rem">Aucun paiement enregistré.</p>
+                        <p class="text-sm text-gray-400">Aucun paiement enregistre.</p>
                     </c:if>
-                    <div class="timeline">
+                    <div class="flex flex-col gap-2">
                         <c:forEach var="p" items="${c.paiements}">
-                            <div class="timeline-item">
-                                <div class="timeline-dot ${p.statut eq 'VALIDE' ? 'green' : p.statut eq 'REJETE' ? 'red' : 'orange'}"></div>
-                                <div class="timeline-content">
-                                    <strong><fmt:formatNumber value="${p.montant}" pattern="#,##0"/> F</strong>
-                                    — ${p.moisConcerne} — ${p.modePaiement}
-                                    <c:choose>
-                                        <c:when test="${p.statut eq 'VALIDE'}"><span class="badge badge-green" style="font-size:.7rem">Validé</span></c:when>
-                                        <c:when test="${p.statut eq 'REJETE'}"><span class="badge badge-red" style="font-size:.7rem">Rejeté</span></c:when>
-                                        <c:otherwise><span class="badge badge-orange" style="font-size:.7rem">En attente</span></c:otherwise>
-                                    </c:choose>
-                                    <div class="timeline-date">${p.datePaiementFormattee}</div>
+                            <div class="flex items-center gap-3 p-3 rounded-lg bg-gray-50 border border-gray-100">
+                                <div class="w-2 h-2 rounded-full shrink-0
+                                    ${p.statut eq 'VALIDE' ? 'bg-green-500' : p.statut eq 'REJETE' ? 'bg-red-500' : 'bg-amber-500'}">
                                 </div>
+                                <div class="flex-1 text-sm">
+                                    <span class="font-semibold text-gray-800">
+                                        <fmt:formatNumber value="${p.montant}" pattern="#,##0"/> F
+                                    </span>
+                                    <span class="text-gray-400 mx-1">—</span>
+                                    <span class="text-gray-600">${p.moisConcerne}</span>
+                                    <span class="text-gray-400 mx-1">—</span>
+                                    <span class="text-gray-600">${p.modePaiement}</span>
+                                </div>
+                                <div>
+                                    <c:choose>
+                                        <c:when test="${p.statut eq 'VALIDE'}"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Valide</span></c:when>
+                                        <c:when test="${p.statut eq 'REJETE'}"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Rejete</span></c:when>
+                                        <c:otherwise><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">En attente</span></c:otherwise>
+                                    </c:choose>
+                                </div>
+                                <div class="text-xs text-gray-400">${p.datePaiementFormattee}</div>
                             </div>
                         </c:forEach>
                     </div>
-
-                    <!-- <c:if test="${c.statut eq 'ACTIF'}">
-                        <a href="${pageContext.request.contextPath}/locataire/paiement/new?contratId=${c.id}" class="btn btn-primary btn-sm" style="margin-top:1rem">
-                            💸 Enregistrer un paiement
-                        </a>
-                    </c:if> -->
                 </div>
             </div>
             </c:forEach>

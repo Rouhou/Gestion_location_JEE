@@ -5,125 +5,108 @@
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
     <title>${empty utilisateur ? 'Ajouter un utilisateur' : 'Modifier utilisateur'} — GestionLoc</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<div class="layout">
+<body class="bg-gray-50">
+<div class="flex h-screen overflow-hidden">
     <jsp:include page="/WEB-INF/views/common/navbar.jsp"/>
-    <div class="main-content">
-        <div class="topbar">
-            <span class="topbar-title">
-                ${empty utilisateur ? '👤 Ajouter un utilisateur' : '✏️ Modifier : '.concat(utilisateur.prenom).concat(' ').concat(utilisateur.nom)}
+    <div class="flex-1 flex flex-col overflow-auto">
+
+        <div class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200 shrink-0">
+            <span class="font-semibold text-gray-800 text-lg">
+                ${empty utilisateur ? 'Ajouter un utilisateur' : 'Modifier : '.concat(utilisateur.prenom).concat(' ').concat(utilisateur.nom)}
             </span>
             <a href="${pageContext.request.contextPath}/admin/utilisateurs"
-               class="btn btn-outline btn-sm">← Retour</a>
+               class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
+                Retour
+            </a>
         </div>
-        <div class="page-body">
+
+        <div class="flex-1 p-6">
             <c:if test="${not empty erreur}">
-                <div class="alert alert-danger">⚠️ ${erreur}</div>
+                <div class="px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm mb-5">${erreur}</div>
             </c:if>
 
-            <div class="card" style="max-width:640px;margin:0 auto">
-                <div class="card-header">
-                    <h2>
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm max-w-2xl mx-auto">
+                <div class="px-5 py-4 border-b border-gray-100">
+                    <h2 class="font-semibold text-gray-800">
                         ${empty utilisateur ? 'Nouvel utilisateur' : 'Modifier le compte'}
                     </h2>
                 </div>
-                <div class="card-body">
+                <div class="p-5">
                     <form method="post" action="${pageContext.request.contextPath}/admin/utilisateurs">
-
-                        <%-- ID caché pour le mode édition --%>
                         <c:if test="${not empty utilisateur}">
                             <input type="hidden" name="id" value="${utilisateur.id}"/>
                         </c:if>
 
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>Prénom *</label>
-                                <input type="text" name="prenom" required
-                                       placeholder="Fatou"
-                                       value="${utilisateur.prenom}"/>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex flex-col gap-1">
+                                <label class="text-sm font-medium text-gray-700">Prenom *</label>
+                                <input type="text" name="prenom" required placeholder="Fatou" value="${utilisateur.prenom}"
+                                       class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"/>
                             </div>
-                            <div class="form-group">
-                                <label>Nom *</label>
-                                <input type="text" name="nom" required
-                                       placeholder="Sarr"
-                                       value="${utilisateur.nom}"/>
+                            <div class="flex flex-col gap-1">
+                                <label class="text-sm font-medium text-gray-700">Nom *</label>
+                                <input type="text" name="nom" required placeholder="Sarr" value="${utilisateur.nom}"
+                                       class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"/>
                             </div>
-                            <div class="form-group full">
-                                <label>Adresse email *</label>
-                                <input type="email" name="email" required
-                                       placeholder="fsarr@email.sn"
-                                       value="${utilisateur.email}"/>
+                            <div class="flex flex-col gap-1 col-span-2">
+                                <label class="text-sm font-medium text-gray-700">Adresse email *</label>
+                                <input type="email" name="email" required placeholder="fsarr@email.sn" value="${utilisateur.email}"
+                                       class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"/>
                             </div>
-                            <div class="form-group">
-                                <label>Téléphone</label>
-                                <input type="tel" name="telephone"
-                                       placeholder="77 000 00 00"
-                                       value="${utilisateur.telephone}"/>
+                            <div class="flex flex-col gap-1">
+                                <label class="text-sm font-medium text-gray-700">Telephone</label>
+                                <input type="tel" name="telephone" placeholder="77 000 00 00" value="${utilisateur.telephone}"
+                                       class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"/>
                             </div>
-                            <div class="form-group">
-                                <label>Rôle *</label>
-                                <select name="role" required>
-                                    <option value="">-- Sélectionner --</option>
-                                    <option value="ADMIN"
-                                        ${utilisateur.role eq 'ADMIN' ? 'selected' : ''}>
-                                        Admin
-                                    </option>
-                                    <option value="PROPRIETAIRE"
-                                        ${utilisateur.role eq 'PROPRIETAIRE' ? 'selected' : ''}>
-                                        Propriétaire
-                                    </option>
-                                    <option value="LOCATAIRE"
-                                        ${utilisateur.role eq 'LOCATAIRE' ? 'selected' : ''}>
-                                        Locataire
-                                    </option>
+                            <div class="flex flex-col gap-1">
+                                <label class="text-sm font-medium text-gray-700">Role *</label>
+                                <select name="role" required class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent">
+                                    <option value="">-- Selectionner --</option>
+                                    <option value="ADMIN" ${utilisateur.role eq 'ADMIN' ? 'selected' : ''}>Admin</option>
+                                    <option value="PROPRIETAIRE" ${utilisateur.role eq 'PROPRIETAIRE' ? 'selected' : ''}>Proprietaire</option>
+                                    <option value="LOCATAIRE" ${utilisateur.role eq 'LOCATAIRE' ? 'selected' : ''}>Locataire</option>
                                 </select>
                             </div>
 
-                            <%-- Mot de passe uniquement à la création --%>
                             <c:if test="${empty utilisateur}">
-                                <div class="form-group">
-                                    <label>Mot de passe *</label>
-                                    <input type="password" name="password" required
-                                           placeholder="••••••••"/>
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-sm font-medium text-gray-700">Mot de passe *</label>
+                                    <input type="password" name="password" required placeholder="••••••••"
+                                           class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"/>
                                 </div>
-                                <div class="form-group">
-                                    <label>Confirmer *</label>
-                                    <input type="password" name="passwordConfirm" required
-                                           placeholder="••••••••"/>
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-sm font-medium text-gray-700">Confirmer *</label>
+                                    <input type="password" name="passwordConfirm" required placeholder="••••••••"
+                                           class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"/>
                                 </div>
                             </c:if>
 
-                            <%-- Statut uniquement en mode édition --%>
                             <c:if test="${not empty utilisateur}">
-                                <div class="form-group full">
-                                    <label>Statut du compte</label>
-                                    <div style="display:flex;align-items:center;gap:1rem;margin-top:.3rem">
+                                <div class="col-span-2">
+                                    <p class="text-sm font-medium text-gray-700 mb-2">Statut du compte</p>
+                                    <div class="flex items-center gap-3">
                                         <c:choose>
                                             <c:when test="${utilisateur.actif}">
-                                                <span class="badge badge-green" style="font-size:.85rem">✅ Compte actif</span>
-                                                <form method="post"
-                                                      action="${pageContext.request.contextPath}/admin/utilisateurs"
-                                                      style="display:inline">
+                                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Compte actif</span>
+                                                <form method="post" action="${pageContext.request.contextPath}/admin/utilisateurs" class="inline">
                                                     <input type="hidden" name="action" value="toggle"/>
-                                                    <input type="hidden" name="id"     value="${utilisateur.id}"/>
-                                                    <button type="submit" class="btn btn-warn btn-sm"
-                                                            onclick="return confirm('Désactiver ce compte ?')">
-                                                        🚫 Désactiver
+                                                    <input type="hidden" name="id" value="${utilisateur.id}"/>
+                                                    <button type="submit" onclick="return confirm('Desactiver ce compte ?')"
+                                                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors">
+                                                        Desactiver
                                                     </button>
                                                 </form>
                                             </c:when>
                                             <c:otherwise>
-                                                <span class="badge badge-gray" style="font-size:.85rem">🚫 Compte inactif</span>
-                                                <form method="post"
-                                                      action="${pageContext.request.contextPath}/admin/utilisateurs"
-                                                      style="display:inline">
+                                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">Compte inactif</span>
+                                                <form method="post" action="${pageContext.request.contextPath}/admin/utilisateurs" class="inline">
                                                     <input type="hidden" name="action" value="toggle"/>
-                                                    <input type="hidden" name="id"     value="${utilisateur.id}"/>
-                                                    <button type="submit" class="btn btn-success btn-sm"
-                                                            onclick="return confirm('Activer ce compte ?')">
-                                                        ✅ Activer
+                                                    <input type="hidden" name="id" value="${utilisateur.id}"/>
+                                                    <button type="submit" onclick="return confirm('Activer ce compte ?')"
+                                                            class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg bg-green-100 text-green-700 hover:bg-green-200 transition-colors">
+                                                        Activer
                                                     </button>
                                                 </form>
                                             </c:otherwise>
@@ -133,31 +116,31 @@
                             </c:if>
                         </div>
 
-                        <div style="display:flex;gap:.8rem;margin-top:1.5rem">
-                            <button type="submit" class="btn btn-primary">
-                                💾 ${empty utilisateur ? 'Créer le compte' : 'Enregistrer les modifications'}
+                        <div class="flex items-center gap-3 mt-6">
+                            <button type="submit"
+                                    class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-indigo-700 text-white hover:bg-indigo-800 transition-colors">
+                                ${empty utilisateur ? 'Creer le compte' : 'Enregistrer les modifications'}
                             </button>
                             <a href="${pageContext.request.contextPath}/admin/utilisateurs"
-                               class="btn btn-outline">Annuler</a>
+                               class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
+                                Annuler
+                            </a>
                         </div>
                     </form>
 
-                    <%-- Zone suppression (édition seulement) --%>
                     <c:if test="${not empty utilisateur}">
-                        <hr style="margin:1.5rem 0;border:none;border-top:1px solid #ffcdd2"/>
-                        <div style="display:flex;align-items:center;justify-content:space-between">
+                        <div class="mt-6 pt-6 border-t border-red-100 flex items-center justify-between">
                             <div>
-                                <p style="font-weight:600;color:#c62828;font-size:.9rem">Zone dangereuse</p>
-                                <p style="font-size:.82rem;color:#9e9e9e">
-                                    La suppression est irréversible et supprime toutes les données liées.
-                                </p>
+                                <p class="font-semibold text-red-700 text-sm">Zone dangereuse</p>
+                                <p class="text-xs text-gray-400 mt-0.5">La suppression est irreversible et supprime toutes les donnees liees.</p>
                             </div>
                             <form method="post" action="${pageContext.request.contextPath}/admin/utilisateurs">
                                 <input type="hidden" name="action" value="supprimer"/>
-                                <input type="hidden" name="id"     value="${utilisateur.id}"/>
-                                <button type="submit" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Supprimer définitivement ${utilisateur.prenom} ${utilisateur.nom} ?')">
-                                    🗑️ Supprimer le compte
+                                <input type="hidden" name="id" value="${utilisateur.id}"/>
+                                <button type="submit"
+                                        onclick="return confirm('Supprimer definitivement ${utilisateur.prenom} ${utilisateur.nom} ?')"
+                                        class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors">
+                                    Supprimer le compte
                                 </button>
                             </form>
                         </div>
@@ -169,7 +152,6 @@
     </div>
 </div>
 <script>
-// Validation confirmation mot de passe (création uniquement)
 document.querySelector('form').addEventListener('submit', function(e) {
     const pwd     = document.querySelector('[name="password"]');
     const confirm = document.querySelector('[name="passwordConfirm"]');
