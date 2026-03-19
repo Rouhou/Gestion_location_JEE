@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.1"
+             xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+             https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd">
+
+    <persistence-unit name="gestionLocationsPU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <!-- Entités -->
+        <class>com.location.entities.Utilisateur</class>
+        <class>com.location.entities.Immeuble</class>
+        <class>com.location.entities.UniteLocation</class>
+        <class>com.location.entities.ContratLocation</class>
+        <class>com.location.entities.Paiement</class>
+        <class>com.location.entities.DemandeLocation</class>
+
+        <properties>
+            <!-- PostgreSQL -->
+            <property name="jakarta.persistence.jdbc.driver"   value="org.postgresql.Driver"/>
+            <property name="jakarta.persistence.jdbc.url"      value="jdbc:postgresql://localhost:5432/gestion_locations"/>
+            <property name="jakarta.persistence.jdbc.user"     value="postgres"/>
+            <property name="jakarta.persistence.jdbc.password" value="passer"/>
+
+            <!-- Hibernate -->
+            <property name="hibernate.dialect"                 value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <property name="hibernate.hbm2ddl.auto"            value="update"/>
+            <property name="hibernate.show_sql"                value="true"/>
+            <property name="hibernate.format_sql"              value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>

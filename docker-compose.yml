@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: postgres_gestion_location_jee
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-passer}
+      - POSTGRES_DB=${POSTGRES_DB:-gestion_locations}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  pgAdmin:
+    image: adminer
+    container_name: adminer_gestion_location_jee
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+
+volumes:
+  postgres_data:
