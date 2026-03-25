@@ -1,0 +1,12 @@
+name: Test Runner
+
+on:
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: runner_isi
+    steps:
+      - name: Afficher le nom du runner
+        run: |
+          echo "Runner name: $RUNNER_NAME"
